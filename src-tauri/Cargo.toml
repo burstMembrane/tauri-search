@@ -1,8 +1,8 @@
 [package]
-name = "tauri-macos-spotlight-app"
+name = "tauri-search"
 version = "0.0.0"
-description = "A Tauri macOS spotlight app"
-authors = ["Victor Aremu <victor.olorunbunmi@gmail.com>"]
+description = "A Tauri search app"
+authors = ["Liam Power <liafmpwoer@gmail.com>"]
 license = ""
 repository = ""
 edition = "2021"
@@ -18,6 +18,11 @@ serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.7.2", features = ["macos-private-api", "api-all"] }
 bitflags = "2.4.1"
+applications = "0.2.3"
+icns = "0.3.1"
+base64 = "0.22.1"
+lazy_static = "1.5.0"
+image = "0.24.4"
 
 [target."cfg(target_os = \"macos\")".dependencies]
 core-graphics = { version = "0.23" }
