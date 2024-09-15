@@ -23,6 +23,7 @@ icns = "0.3.1"
 base64 = "0.22.1"
 lazy_static = "1.5.0"
 image = "0.24.4"
+open = "3.2.0"
 
 [target."cfg(target_os = \"macos\")".dependencies]
 core-graphics = { version = "0.23" }

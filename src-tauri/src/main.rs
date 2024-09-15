@@ -15,6 +15,15 @@ fn get_icon(path: String) -> String {
 }
 
 #[tauri::command]
+async fn launch_app(path: String) {
+    println!("Opening app at '{}'", path);
+    match open::that(&path) {
+        Ok(()) => println!("Opened '{}' successfully.", path),
+        Err(err) => eprintln!("An error occurred when opening '{}': {}", path, err),
+    }
+}
+
+#[tauri::command]
 async fn get_apps() -> String {
     // Load the cache from disk if available
     if let Some(cached_data) = load_cache() {
@@ -33,6 +42,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             get_icon,
             get_apps,
+            launch_app,
             spotlight::init_spotlight_window,
             spotlight::show_spotlight,
             spotlight::hide_spotlight,
