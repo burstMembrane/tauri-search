@@ -92,6 +92,11 @@ function App() {
     const filteredItems: AppReference[] = filterApps(data, value);
     setApps(filteredItems);
   };
+
+
+  const handleSelect = async (app: AppReference) => {
+    await invoke("launch_app", { path: app.path });
+  }
   return (
 
 
@@ -117,9 +122,10 @@ function App() {
             <CommandEmpty></CommandEmpty>
             <CommandGroup className="fixed overflow-scroll w-full" heading="Apps">
               {apps && apps.map((app: AppReference) => (
-                <CommandItem key={app.name}>
+                <CommandItem onSelect={(e) => {
+                  handleSelect(app);
+                }} key={app.name}>
                   <img className="w-8 h-8 mx-2" src={`data:image/png;base64,${app.icon_base64}`} alt={app.name} /> {app.name}
-
                 </CommandItem>
               ))}
             </CommandGroup>
