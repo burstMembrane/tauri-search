@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "tauri-macos-spotlight-app",
+    "productName": "tauri-search",
     "version": "0.0.0"
   },
   "tauri": {
