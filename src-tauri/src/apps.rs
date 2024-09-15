@@ -12,12 +12,59 @@ use std::io::Cursor;
 use icns::{IconFamily, IconType};
 
 #[derive(Serialize, Deserialize)]
-struct AppReference {
+pub struct AppReference {
     name: String,
     icon: Option<PathBuf>,
     path: PathBuf,
     executable_path: Option<PathBuf>,
     icon_base64: Option<String>,
+}
+// turn off dead code warning
+#[allow(dead_code)]
+impl AppReference {
+    pub fn new(
+        name: String,
+        icon: Option<PathBuf>,
+        path: PathBuf,
+        executable_path: Option<PathBuf>,
+    ) -> Self {
+        Self {
+            name,
+            icon,
+            path,
+            executable_path,
+            icon_base64: None,
+        }
+    }
+
+    pub fn default() -> Self {
+        Self {
+            name: "".to_string(),
+            icon: None,
+            path: PathBuf::new(),
+            executable_path: None,
+            icon_base64: None,
+        }
+    }
+
+    pub fn get_icon_base64(self: &AppReference) -> Option<String> {
+        let icon_path = self.icon.as_ref()?;
+        let icon_path = convert_icns_to_base64(&icon_path);
+        icon_path.ok()
+    }
+
+    pub fn with_icon_base64(mut self) -> Self {
+        self.icon_base64 = self.get_icon_base64();
+        self
+    }
+}
+
+// allow dead code for now, as this will be implemented in the future
+#[allow(dead_code)]
+pub fn get_app_icon_base64(app: &AppReference) -> Option<String> {
+    let icon_path = app.icon.as_ref()?;
+    let icon_path = convert_icns_to_base64(&icon_path);
+    icon_path.ok()
 }
 
 fn convert_icns_to_base64(icon_path: &PathBuf) -> Result<String, String> {
@@ -77,6 +124,15 @@ pub fn get_apps() -> String {
     let app_references = filter_system_apps(&app_references);
     // deserialize all to a json array
 
+    // filter duplicate app references
+    let app_references: Vec<&AppReference> =
+        app_references.iter().fold(Vec::new(), |mut acc, app| {
+            if !acc.iter().any(|&x| x.name == app.name) {
+                acc.push(app);
+            }
+            acc
+        });
+
     // get the icon path for all the app references
     let app_references: Vec<AppReference> = app_references
         .iter()
@@ -125,6 +181,11 @@ fn get_app_references() -> Vec<AppReference> {
         })
         .collect();
     app_references
+}
+
+pub fn icon_path_to_base64(path: &str) -> Option<String> {
+    let icon_base64 = convert_icns_to_base64(&PathBuf::from(path));
+    icon_base64.ok()
 }
 
 fn filter_system_apps<'a>(apps: &'a Vec<AppReference>) -> Vec<&'a AppReference> {
