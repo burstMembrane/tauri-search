@@ -17,6 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import { commandScore } from "./lib/score";
 
 import "./App.css";
+import { CommandLoading } from "cmdk";
 // AppReference type mirrored in src-tauri/
 type AppReference = {
   name: string,
@@ -110,6 +111,8 @@ function App() {
             }}
 
           />
+
+          {isLoading && <CommandLoading>Hang on…</CommandLoading>}
           <CommandList>
             <CommandEmpty></CommandEmpty>
             <CommandGroup className="fixed overflow-scroll w-full" heading="Apps">
